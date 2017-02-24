@@ -8,25 +8,25 @@ And Timer1 interrupt used for Nixie tube refreshing / multiplexing, for a stable
 
 ## Pinout
 Default ArduinNIX pinout for 6 nixie tubes:
-* SN74141 (1)
+#### SN74141 (1)
 - ledPin_0_a: 2;
 - ledPin_0_b: 3;
 - ledPin_0_c: 4;
 - ledPin_0_d: 5;
 
-* SN74141 (2)
+#### SN74141 (2)
 - ledPin_1_a: 6;
 - ledPin_1_b: 7;
 - ledPin_1_c: 8;
 - ledPin_1_d: 9;
 
-* anode pins
+#### Anode pins
 - ledPin_a_1: 10
 - ledPin_a_2: 11
 - ledPin_a_3: 12
 - ledPin_a_4: 13
 
-* Ublox Neo-6M GPS module using SPI 
+#### Ublox Neo-6M GPS module using SPI 
 - SPI pins on ICSP header (MISO, MOSI, SCK)
 - ublox_CSn_PIN: A5
 - ublox_RESETn_PIN: A4
