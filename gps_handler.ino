@@ -1,4 +1,5 @@
 //#define DEBUG
+#define GPS_CLOCK_SYNC_RATE   (60ll * 60 * 1000)
 
 void GPSSetup() {
   #ifdef DEBUG
@@ -47,7 +48,7 @@ void GPSLoop() {
       if (fix_data.valid.time)
       {
         /* Only update if > 1 hour since last update */
-        if ((!time_sync) || (last_update > (millis() + 60ll * 60 * 1000)))
+        if ((!time_sync) || (last_update > (millis() + GPS_CLOCK_SYNC_RATE)))
         {
           #ifdef DEBUG
             Serial.println("Setting time from GPS!");
@@ -55,6 +56,7 @@ void GPSLoop() {
           last_update = millis();
           time_sync = true;
           setTime(fix_data.dateTime.hours, fix_data.dateTime.minutes, fix_data.dateTime.seconds, fix_data.dateTime.date, fix_data.dateTime.month, fix_data.dateTime.year);
+          adjustTime(offset * SECS_PER_HOUR);
         }
       }
     }
