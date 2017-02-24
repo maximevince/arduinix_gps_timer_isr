@@ -6,6 +6,8 @@ Arduino code for using the excellent ArduiNIX Nixie shield: http://arduinix.com/
 With an added GPS for time synchronisation  
 And Timer1 interrupt used for Nixie tube refreshing / multiplexing, for a stable non-jittering tube display
 
+![alt tag](![alt tag](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png))
+
 ## Pinout
 Default ArduinNIX pinout for 6 nixie tubes:
 #### SN74141 (1)
