@@ -1,10 +1,11 @@
 # arduinix_gps_timer_isr
-Arduino code for using the ArduiNIX Nixie shield with a GPS for time synchonisation and timer interrupts for stable tube multiplexing
+Arduino code for using the ArduiNIX Nixie shield with a GPS for time synchronisation and timer interrupts for stable tube multiplexing/refreshing
 
 ## What is it
 Arduino code for using the excellent ArduiNIX Nixie shield: http://arduinix.com/  
 With an added GPS for time synchronisation  
-And Timer1 interrupt used for Nixie tube refreshing / multiplexing, for a stable non-jittering tube display
+And Timer1 interrupt used for Nixie tube refreshing / multiplexing, for a stable non-jittering tube display  
+Non-blocking tube refreshing (no `delay()`-functions used)
 
 ![arduiNIX image](/img/arduinix.jpg?raw=true "arduiNIX")
 
