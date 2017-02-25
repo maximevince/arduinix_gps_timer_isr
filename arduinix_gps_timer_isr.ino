@@ -93,7 +93,31 @@ void timerIsr()
   if( upperHours >= 10 )     upperHours = upperHours / 10;
 
   // Display.
-  WriteDisplay(upperHours, lowerHours, upperMins, lowerMins, upperSeconds, lowerSeconds);
+  if (GPSIsTimeSynced())
+  {
+    // Display clock
+    WriteDisplay(upperHours, lowerHours, upperMins, lowerMins, upperSeconds, lowerSeconds);
+  }
+  else
+  {
+    // Display loading bar
+    static int bar[9] = {1, 1, 1, 10, 10, 10, 10, 10, 10};
+    static unsigned long lastShift = millis();
+    
+    if (lastShift + 200 < millis())
+    {
+      const int len = sizeof(bar)/sizeof(int);
+      const int temp = bar[len - 1]; // save temp value
+      for (int i = len - 1; i > 0; i--)
+      {
+        bar[i] = bar[i - 1];
+      }
+      bar[0] = temp; // restore saved temp value
+      lastShift = millis();
+    }
+    
+    WriteDisplay(bar[5], bar[4], bar[3], bar[2], bar[1], bar[0]);
+  }
 }
 
 void loop()

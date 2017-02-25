@@ -1,6 +1,8 @@
 //#define DEBUG
 #define GPS_CLOCK_SYNC_RATE   (60ll * 60 * 1000)
 
+static bool time_sync = false;
+
 void GPSSetup() {
   #ifdef DEBUG
     Serial.begin(115200);
@@ -16,7 +18,6 @@ void GPSSetup() {
 
 void GPSLoop() {
   static unsigned long last_update = 0;
-  static bool time_sync = false;
   byte    in_byte = 0x0;
   uint8_t data;
 
@@ -62,3 +63,9 @@ void GPSLoop() {
     }
   }
 }
+
+bool GPSIsTimeSynced(void)
+{
+  return time_sync;
+}
+
