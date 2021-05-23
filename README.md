@@ -10,6 +10,10 @@ Arduino code for using the ArduiNIX Nixie shield with a GPS for time synchronisa
 
 ![arduiNIX image](/img/arduinix.jpg?raw=true "arduiNIX")
 
+## Target board
+Timings have only been verified on ATMEGA 2560.
+Adjustments might be needed for Arduino Uno boards.
+
 ## Pinout
 Default ArduinNIX pinout for 6 nixie tubes:
 #### SN74141 (1)

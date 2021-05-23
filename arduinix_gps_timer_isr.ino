@@ -4,21 +4,30 @@
 // 2017-02-23 - modded to add GPS timesource by and ISR tube refreshing
 //
 // Using libraries:
-// NeoGPS,    for GPS parsing:       https://github.com/SlashDevin/NeoGPS
-// Time,      for time keeping:      http://playground.arduino.cc/Code/time
-// TimerOne.  for Timer1 interrupts: http://playground.arduino.cc/Code/Timer1
+// NeoGPS   for GPS parsing
+// Time     for time keeping
+// TimerOne for Timer1 interrupts
+// Timezone for Timezones / DST
 //
 
 #include <SPI.h>
-#include <NMEAGPS.h>
-#include <TimeLib.h>
-#include <TimerOne.h>
+#include <NMEAGPS.h>    // https://github.com/SlashDevin/NeoGPS
+#include <TimeLib.h>    // http://playground.arduino.cc/Code/time
+#include <TimerOne.h>   // https://github.com/PaulStoffregen/TimerOne
+#include <Timezone.h>   // https://github.com/JChristensen/Timezone
+
 
 // Tube refresh rate in milliseconds
 const int tube_delay = 2; // multiplexing delay; adjust for tube type
 
-// TimeZone
-const int offset = 1;   // Central European Time
+// Timezone
+// For more examples, see https://github.com/JChristensen/Timezone/blob/master/examples/WorldClock/WorldClock.ino
+//
+// Central European Time (Frankfurt, Paris)
+TimeChangeRule CEST = {"CEST", Last, Sun, Mar, 2, 120};     // Central European Summer Time
+TimeChangeRule CET = {"CET ", Last, Sun, Oct, 3, 60};       // Central European Standard Time
+Timezone myTimeZone(CEST, CET);
+TimeChangeRule *tcr;        // pointer to the time change rule, use to get TZ abbrev
 
 // SN74141 : Truth Table (BCD)
 // D,C,B,A are BCD coded, with A being LSB
@@ -45,6 +54,7 @@ int ledPin_a_4 = 13;
 const uint8_t ublox_CSn_PIN     = A5;
 const uint8_t ublox_RESETn_PIN  = A4;
 const uint8_t SPI_MODE          = 0;
+
 
 static NMEAGPS gps;
 static gps_fix fix_data;
@@ -125,4 +135,3 @@ void loop()
   // GPS loop
   GPSLoop();
 }
-

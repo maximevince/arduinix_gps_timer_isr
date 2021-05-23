@@ -8,12 +8,44 @@ void GPSSetup() {
     Serial.begin(115200);
     Serial.println("Starting GPS/SPI!");
   #endif
-  
+
   pinMode(ublox_CSn_PIN, OUTPUT);
   pinMode(ublox_RESETn_PIN, OUTPUT);
   digitalWrite(ublox_RESETn_PIN, LOW);  // reset
   SPI.begin();
   digitalWrite(ublox_RESETn_PIN, HIGH); // not in reset
+}
+
+void printDateTime(time_t t, const char *tz)
+{
+    char buf[32];
+    char m[4];    // temporary storage for month string (DateStrings.cpp uses shared buffer)
+    strcpy(m, monthShortStr(month(t)));
+    sprintf(buf, "%.2d:%.2d:%.2d %s %.2d %s %d %s",
+        hour(t), minute(t), second(t), dayShortStr(weekday(t)), day(t), m, year(t), tz);
+    Serial.println(buf);
+}
+
+static time_t GPSMakeTime(NeoGPS::time_t &dt)
+{
+#ifdef DEBUG
+    char buf[64];
+    sprintf(buf, "maketime %.2d:%.2d:%.2d, %.2d %.2d %.2d",
+        dt.hours, dt.minutes, dt.seconds, dt.date, dt.month, dt.year);
+    Serial.println(buf);
+#endif
+
+    tmElements_t tm;
+
+    tm.Year = dt.full_year() - 1970;
+    tm.Month = dt.month;
+    tm.Day = dt.date;
+
+    tm.Hour = dt.hours;
+    tm.Minute = dt.minutes;
+    tm.Second = dt.seconds;
+
+    return makeTime(tm);
 }
 
 void GPSLoop() {
@@ -46,8 +78,7 @@ void GPSLoop() {
       #endif
 
       /* Sync clock */
-      if (fix_data.valid.time)
-      {
+      if (fix_data.valid.time && fix_data.valid.date) {
         /* Only update if > 1 hour since last update */
         if ((!time_sync) || (last_update > (millis() + GPS_CLOCK_SYNC_RATE)))
         {
@@ -56,8 +87,9 @@ void GPSLoop() {
           #endif
           last_update = millis();
           time_sync = true;
-          setTime(fix_data.dateTime.hours, fix_data.dateTime.minutes, fix_data.dateTime.seconds, fix_data.dateTime.date, fix_data.dateTime.month, fix_data.dateTime.year);
-          adjustTime(offset * SECS_PER_HOUR);
+          time_t gpstime = GPSMakeTime(fix_data.dateTime);
+          setTime(myTimeZone.toLocal(gpstime, &tcr));
+          printDateTime(gpstime, tcr -> abbrev);
         }
       }
     }
@@ -68,4 +100,3 @@ bool GPSIsTimeSynced(void)
 {
   return time_sync;
 }
-
