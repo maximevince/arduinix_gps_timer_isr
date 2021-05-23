@@ -7,6 +7,7 @@ Arduino code for using the ArduiNIX Nixie shield with a GPS for time synchronisa
 * And Timer1 interrupt used for Nixie tube refreshing / multiplexing, for a stable non-jittering tube display  
 * Non-blocking tube refreshing (no `delay()`-functions used)
 * Displays a loading bar during first GPS timesync
+* Handles Timezones and DST correctly. Timezone can be configured at compile-time.
 
 ![arduiNIX image](/img/arduinix.jpg?raw=true "arduiNIX")
 
