@@ -11,7 +11,7 @@
 
 #include <SPI.h>
 #include <NMEAGPS.h>
-#include <Time.h>
+#include <TimeLib.h>
 #include <TimerOne.h>
 
 // Tube refresh rate in milliseconds
@@ -30,7 +30,7 @@ int ledPin_0_c = 4;
 int ledPin_0_d = 5;
 
 // SN74141 (2)
-int ledPin_1_a = 6;                
+int ledPin_1_a = 6;
 int ledPin_1_b = 7;
 int ledPin_1_c = 8;
 int ledPin_1_d = 9;
@@ -49,18 +49,18 @@ const uint8_t SPI_MODE          = 0;
 static NMEAGPS gps;
 static gps_fix fix_data;
 
-void setup() 
+void setup()
 {
   pinMode(ledPin_0_a, OUTPUT);
   pinMode(ledPin_0_b, OUTPUT);
   pinMode(ledPin_0_c, OUTPUT);
   pinMode(ledPin_0_d, OUTPUT);
-  
+
   pinMode(ledPin_1_a, OUTPUT);
   pinMode(ledPin_1_b, OUTPUT);
   pinMode(ledPin_1_c, OUTPUT);
   pinMode(ledPin_1_d, OUTPUT);
-  
+
   pinMode(ledPin_a_1, OUTPUT);
   pinMode(ledPin_a_2, OUTPUT);
   pinMode(ledPin_a_3, OUTPUT);
@@ -81,7 +81,7 @@ void timerIsr()
   int minutes = minute();
   int seconds = second();
 
-  // Get the high and low order values for hours,min,seconds. 
+  // Get the high and low order values for hours,min,seconds.
   int lowerHours = hours % 10;
   int upperHours = hours - lowerHours;
   int lowerMins = minutes % 10;
@@ -103,7 +103,7 @@ void timerIsr()
     // Display loading bar
     static int bar[9] = {1, 1, 1, 10, 10, 10, 10, 10, 10};
     static unsigned long lastShift = millis();
-    
+
     if (lastShift + 200 < millis())
     {
       const int len = sizeof(bar)/sizeof(int);
@@ -115,7 +115,7 @@ void timerIsr()
       bar[0] = temp; // restore saved temp value
       lastShift = millis();
     }
-    
+
     WriteDisplay(bar[5], bar[4], bar[3], bar[2], bar[1], bar[0]);
   }
 }
