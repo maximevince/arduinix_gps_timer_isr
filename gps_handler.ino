@@ -64,8 +64,10 @@ void GPSLoop() {
     if (gps.decode(in_byte) == NMEAGPS::DECODE_COMPLETED) {
       fix_data = gps.fix();
       #ifdef DEBUG
-        Serial.print("\r\nFIX: time valid: ");
+        Serial.print("[*] FIX: time valid: ");
         Serial.print(fix_data.valid.time);
+        Serial.print(" date valid: ");
+        Serial.print(fix_data.valid.date);
         Serial.print(" time: ");
         Serial.print(fix_data.dateTime.hours);
         Serial.print(":");
@@ -80,7 +82,7 @@ void GPSLoop() {
       /* Sync clock */
       if (fix_data.valid.time && fix_data.valid.date) {
         /* Only update if > 1 hour since last update */
-        if ((!time_sync) || (last_update > (millis() + GPS_CLOCK_SYNC_RATE)))
+        if ((!time_sync) || (millis() > last_update + GPS_CLOCK_SYNC_RATE))
         {
           #ifdef DEBUG
             Serial.println("Setting time from GPS!");
